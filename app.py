@@ -5,10 +5,10 @@ import re
 from typing import Any, Dict, List, Optional
 
 import streamlit as st
+from docx import Document
 from google import genai
 from google.genai import types
 from pypdf import PdfReader
-
 
 MODEL_NAME = "gemini-2.5-flash"
 MAX_FILE_MB = 10
