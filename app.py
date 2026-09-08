@@ -6,9 +6,16 @@ from typing import Any, Dict, List, Optional
 
 import streamlit as st
 from docx import Document
-from google import genai
-from google.genai import types
+try:
+    from google import genai
+    from google.genai import types
+except ImportError as exc:
+    raise ImportError(
+        "Google GenAI SDK is missing. Make sure requirements.txt contains "
+        "'google-genai>=2.22.0,<3.0.0' and redeploy/reboot the Streamlit app."
+    ) from exc
 from pypdf import PdfReader
+
 
 MODEL_NAME = "gemini-2.5-flash"
 MAX_FILE_MB = 10
@@ -56,7 +63,7 @@ def extract_text(uploaded_file) -> str:
 def get_api_key() -> Optional[str]:
     """Read Gemini API key from Streamlit secrets or environment."""
     try:
-        key = st.secrets.get("AQ.Ab8RN6L7r6asZVMHYLu-iI8KnrPfpW7SM3F2LjmNGpVI7k7DdQ")
+        key = st.secrets.get("GEMINI_API_KEY")
         if key:
             return str(key).strip()
     except Exception:
@@ -408,16 +415,3 @@ if "analysis" in st.session_state:
         st.write(", ".join(result["missing_keywords"]))
     else:
         st.success("No major missing keywords were identified from the supplied job description.")
-
-    st.subheader("✍️ Rewrite Examples")
-    for item in result["rewrite_examples"]:
-        st.markdown(f"- {item}")
-
-    if checks["missing_sections"]:
-        st.subheader("📌 Sections You May Need")
-        st.write(", ".join(checks["missing_sections"]))
-
-    st.caption(
-        "Note: ATS scores vary by employer, ATS vendor, job description, and resume format. "
-        "Use this score as an optimization guide, not a hiring prediction."
-    )
