@@ -57,7 +57,7 @@ def extract_text(uploaded_file) -> str:
 def get_api_key() -> Optional[str]:
     """Read Gemini API key from Streamlit secrets or environment."""
     try:
-        key = st.secrets.get("GEMINI_API_KEY")
+        key = st.secrets.get("AQ.Ab8RN6L7r6asZVMHYLu-iI8KnrPfpW7SM3F2LjmNGpVI7k7DdQ")
         if key:
             return str(key).strip()
     except Exception:
